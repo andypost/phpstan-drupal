@@ -42,8 +42,7 @@ final class DrupalIntegrationTest extends AnalyzerTestBase {
     public function testExtensionReportsError() {
         $is_d9 = version_compare('9.0.0', \Drupal::VERSION) !== 1;
         $errors = $this->runAnalyze(__DIR__ . '/../fixtures/drupal/modules/phpstan_fixtures/phpstan_fixtures.module');
-        // @todo this only broke on D9.
-        self::assertCount($is_d9 ? 4 : 3, $errors->getErrors(), var_export($errors, true));
+        self::assertCount(3, $errors->getErrors(), var_export($errors, true));
         self::assertCount(0, $errors->getInternalErrors(), var_export($errors, true));
 
         $errors = $errors->getErrors();
@@ -51,12 +50,7 @@ final class DrupalIntegrationTest extends AnalyzerTestBase {
         self::assertEquals('If condition is always false.', $error->getMessage());
         $error = array_shift($errors);
         self::assertEquals('Function phpstan_fixtures_MissingReturnRule() should return string but return statement is missing.', $error->getMessage());
-        if ($is_d9) {
-            $error = array_shift($errors);
-            self::assertEquals('Binary operation "." between SplString and \'/core/includes…\' results in an error.', $error->getMessage());
-        }
         $error = array_shift($errors);
-
         self::assertNotFalse(strpos($error->getMessage(), 'phpstan_fixtures/phpstan_fixtures.fetch.inc could not be loaded from Drupal\\Core\\Extension\\ModuleHandlerInterface::loadInclude'));
     }
 
@@ -66,6 +60,7 @@ final class DrupalIntegrationTest extends AnalyzerTestBase {
             __DIR__ . '/../fixtures/drupal/modules/module_with_tests/tests/src/Unit/ModuleWithTestsTest.php',
             __DIR__ . '/../fixtures/drupal/modules/module_with_tests/tests/src/Traits/ModuleWithTestsTrait.php',
             __DIR__ . '/../fixtures/drupal/modules/module_with_tests/tests/src/TestSite/ModuleWithTestsTestSite.php',
+            __DIR__ . '/../fixtures/drupal/modules/module_with_tests/tests/src/Kernel/DrupalStaticCallTest.php',
         ];
         foreach ($paths as $path) {
             $errors = $this->runAnalyze($path);
@@ -86,8 +81,8 @@ final class DrupalIntegrationTest extends AnalyzerTestBase {
             'Call to an undefined method Drupal\Core\Entity\EntityManager::thisMethodDoesNotExist().',
             'Call to deprecated method getDefinitions() of class Drupal\\Core\\Entity\\EntityManager:
 in drupal:8.0.0 and is removed from drupal:9.0.0.
-Use \\Drupal\\Core\\Entity\\EntityTypeManagerInterface::getDefinitions()
-instead.'
+  Use \\Drupal\\Core\\Entity\\EntityTypeManagerInterface::getDefinitions()
+  instead.'
         ];
         $errors = $this->runAnalyze(__DIR__ . '/../fixtures/drupal/modules/phpstan_fixtures/src/TestServicesMappingExtension.php');
         $this->assertCount(3, $errors->getErrors());
@@ -122,6 +117,12 @@ instead.'
 
     public function testThemeSettingsFile() {
         $errors = $this->runAnalyze(__DIR__ . '/../fixtures/drupal/core/modules/system/tests/themes/test_theme_settings/theme-settings.php');
+        $this->assertCount(0, $errors->getErrors(), var_export($errors, TRUE));
+        $this->assertCount(0, $errors->getInternalErrors(), var_export($errors, TRUE));
+    }
+
+    public function testModuleLoadInclude() {
+        $errors = $this->runAnalyze(__DIR__ . '/../fixtures/drupal/modules/module_load_include_fixture/module_load_include_fixture.module');
         $this->assertCount(0, $errors->getErrors(), var_export($errors, TRUE));
         $this->assertCount(0, $errors->getInternalErrors(), var_export($errors, TRUE));
     }

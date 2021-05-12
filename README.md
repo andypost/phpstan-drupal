@@ -1,12 +1,12 @@
 # phpstan-drupal
 
-[![Build Status](https://travis-ci.com/mglaman/phpstan-drupal.svg?branch=master)](https://travis-ci.com/mglaman/phpstan-drupal) [![CircleCI](https://circleci.com/gh/mglaman/phpstan-drupal.svg?style=svg)](https://circleci.com/gh/mglaman/phpstan-drupal)
+[![Tests](https://github.com/mglaman/phpstan-drupal/actions/workflows/php.yml/badge.svg)](https://github.com/mglaman/phpstan-drupal/actions/workflows/php.yml) [![CircleCI](https://circleci.com/gh/mglaman/phpstan-drupal.svg?style=svg)](https://circleci.com/gh/mglaman/phpstan-drupal)
 
 Extension for [PHPStan](https://phpstan.org/) to allow analysis of Drupal code.
 
 ## Sponsors
 
-[![undpaul](https://www.undpaul.de/themes/custom/undpaul3/logo.svg)](https://www.undpaul.de/)
+<a href="https://www.undpaul.de/"><img src="https://www.undpaul.de/themes/custom/undpaul3/logo.svg" alt="undpaul" width="250" /></a> <a href="https://www.intracto.com/"><img src="https://digidak.be/wp-content/uploads/2020/03/logo-intracto-base-positief-grijs-blauw@4x-rgb.png" alt="Intracto" width="225" /></a>
 
 [Would you like to sponsor?](https://github.com/sponsors/mglaman)
 
